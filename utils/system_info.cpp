@@ -8,7 +8,8 @@
 #include <unistd.h>
 #endif
 
-int SystemInfo::getRAM_GB() {
+int SystemInfo::getRAM_GB()
+{
 
 #if defined(_WIN32)
     MEMORYSTATUSEX status;
@@ -26,28 +27,25 @@ int SystemInfo::getRAM_GB() {
 #elif defined(__linux__)
     long pages = sysconf(_SC_PHYS_PAGES);
     long page_size = sysconf(_SC_PAGE_SIZE);
-    return (int)((pages * page_size) / (1024LL * 1024LL * 1024LL));
+    long long total = (long long)pages * (long long)page_size;
+    return (int)(total / (1024LL * 1024LL * 1024LL));
 
 #else
     return 8;
 #endif
 }
 
-std::string SystemInfo::getCPUName() {
+std::string SystemInfo::getCPUName()
+{
     return "GenericCPU";
 }
 
-PerformanceTier SystemInfo::getPerformanceTier() {
-
+PerformanceTier SystemInfo::getPerformanceTier()
+{
     int ram = getRAM_GB();
 
-    if (ram <= 16) {
-        return PerformanceTier::LOW;
-    }
-
-    if (ram <= 32) {
-        return PerformanceTier::MEDIUM;
-    }
+    if(ram <= 16) { return PerformanceTier::LOW; }
+    if(ram <= 32) { return PerformanceTier::MEDIUM; }
 
     return PerformanceTier::HIGH;
 }

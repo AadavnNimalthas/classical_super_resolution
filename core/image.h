@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <cassert>
 
 struct Image
 {
@@ -20,11 +21,19 @@ struct Image
 
     float& at(int x, int y, int c)
     {
+        assert(x >= 0 && x < width);
+        assert(y >= 0 && y < height);
+        assert(c >= 0 && c < channels);
+
         return data[(y * width + x) * channels + c];
     }
 
     const float& at(int x, int y, int c) const
     {
+        assert(x >= 0 && x < width);
+        assert(y >= 0 && y < height);
+        assert(c >= 0 && c < channels);
+
         return data[(y * width + x) * channels + c];
     }
 };

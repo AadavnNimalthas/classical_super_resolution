@@ -23,4 +23,5 @@ add_executable(classical_super_resolution ${SOURCES}
         utils/math_utils.cpp
         utils/system_info.cpp
         utils/system_info.h
+        io/stb_impl.cpp
 )

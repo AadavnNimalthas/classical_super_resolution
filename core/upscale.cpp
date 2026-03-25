@@ -12,8 +12,8 @@ Image upscale_lanczos(const Image& input, int scale, int a)
     {
         for(int x = 0; x < new_w; x++)
         {
-            float src_x = static_cast<float>(x) / scale;
-            float src_y = static_cast<float>(y) / scale;
+            float src_x = (x + 0.5f) / scale - 0.5f;
+            float src_y = (y + 0.5f) / scale - 0.5f;
 
             for(int c = 0; c < input.channels; c++)
             {

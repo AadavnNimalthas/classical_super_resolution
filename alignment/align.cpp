@@ -1,12 +1,17 @@
 #include "align.h"
 #include <limits>
 #include <cmath>
+#include <algorithm>
 
 float compute_error(const Image& ref, const Image& target, int dx, int dy)
 {
-    float error = 0.0f;
+    if(ref.channels != target.channels)
+        return std::numeric_limits<float>::max();
 
+    float error = 0.0f;
     int count = 0;
+
+    int channels = ref.channels;
 
     for(int y = 0; y < ref.height; y++)
     {
@@ -18,24 +23,24 @@ float compute_error(const Image& ref, const Image& target, int dx, int dy)
             if(tx < 0 || tx >= target.width || ty < 0 || ty >= target.height)
                 continue;
 
-            for(int c = 0; c < ref.channels; c++)
+            for(int c = 0; c < channels; c++)
             {
                 float diff = ref.at(x, y, c) - target.at(tx, ty, c);
                 error += diff * diff;
+                count++;
             }
-
-            count++;
         }
     }
 
-    if(count == 0) return std::numeric_limits<float>::max();
+    if(count == 0)
+        return std::numeric_limits<float>::max();
 
     return error / count;
 }
 
 Shift estimate_shift(const Image& ref, const Image& target)
 {
-    int search_radius = 2;
+    int search_radius = 3;
 
     float best_error = std::numeric_limits<float>::max();
 

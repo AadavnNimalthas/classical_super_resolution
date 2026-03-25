@@ -4,65 +4,92 @@
 
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 
 Image reconstruct(const std::vector<Image>& images, int scale)
 {
     if(images.empty())
     {
         std::cerr << "No input images\n";
-        exit(1);
+        std::exit(1);
     }
 
-    // Step 1: reference image
     const Image& ref = images[0];
 
-    // Step 2: align all images to reference
-    std::vector<Shift> shifts;
-
+    // Align
+    std::vector<Shift> shifts(images.size());
     for(size_t i = 0; i < images.size(); i++)
     {
-        Shift s = estimate_shift(ref, images[i]);
-        shifts.push_back(s);
+        shifts[i] = estimate_shift(ref, images[i]);
     }
 
-    // Step 3: upscale reference
+    // Upscale initial guess
     Image high = upscale_lanczos(ref, scale, 3);
 
-    int iterations = 5;
+    int iterations = 6;
+    float alpha = 0.15f;
 
-    // Step 4: iterative refinement
     for(int iter = 0; iter < iterations; iter++)
     {
         std::cout << "Iteration " << iter << std::endl;
 
-        // For each image
+        std::vector<float> accum(high.data.size(), 0.0f);
+        std::vector<int> count(high.data.size(), 0);
+
         for(size_t k = 0; k < images.size(); k++)
         {
             const Image& low = images[k];
             Shift shift = shifts[k];
 
-            // Compare low-res and simulated low-res
             for(int y = 0; y < low.height; y++)
             {
                 for(int x = 0; x < low.width; x++)
                 {
-                    int hx = static_cast<int>((x + shift.dx) * scale);
-                    int hy = static_cast<int>((y + shift.dy) * scale);
+                    float fx = (x + shift.dx) * scale;
+                    float fy = (y + shift.dy) * scale;
 
-                    if(hx < 0 || hx >= high.width || hy < 0 || hy >= high.height)
-                        continue;
+                    int x0 = static_cast<int>(fx);
+                    int y0 = static_cast<int>(fy);
 
-                    for(int c = 0; c < low.channels; c++)
+                    for(int dy = 0; dy <= 1; dy++)
                     {
-                        float predicted = high.at(hx, hy, c);
-                        float actual = low.at(x, y, c);
+                        for(int dx = 0; dx <= 1; dx++)
+                        {
+                            int hx = x0 + dx;
+                            int hy = y0 + dy;
 
-                        float error = actual - predicted;
+                            if(hx < 0 || hx >= high.width || hy < 0 || hy >= high.height)
+                                continue;
 
-                        // back-project error
-                        high.at(hx, hy, c) += 0.25f * error;
+                            float wx = 1.0f - std::abs(fx - hx);
+                            float wy = 1.0f - std::abs(fy - hy);
+                            float w = wx * wy;
+
+                            if(w <= 0.0f) continue;
+
+                            for(int c = 0; c < low.channels; c++)
+                            {
+                                int idx = (hy * high.width + hx) * high.channels + c;
+
+                                float predicted = high.data[idx];
+                                float actual = low.at(x, y, c);
+
+                                float error = actual - predicted;
+
+                                accum[idx] += w * error;
+                                count[idx]++;
+                            }
+                        }
                     }
                 }
+            }
+        }
+
+        for(size_t i = 0; i < high.data.size(); i++)
+        {
+            if(count[i] > 0)
+            {
+                high.data[i] += alpha * (accum[i] / count[i]);
             }
         }
     }
