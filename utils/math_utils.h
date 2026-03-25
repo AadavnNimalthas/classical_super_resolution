@@ -1,14 +1,14 @@
-//
-// Created by Aadavn Nimalthas on 2026-03-25.
-//
+#ifndef MATHUTIL_H
+#define MATHUTIL_H
 
-#ifndef CLASSICAL_SUPER_RESOLUTION_MATH_UTILS_H
-#define CLASSICAL_SUPER_RESOLUTION_MATH_UTILS_H
+namespace MathUtil {
 
+    double clamp(double x, double minVal, double maxVal);
 
-class math_utils
-{
-};
+    double sinc(double x);
 
+    double lanczos(double x, int a);
 
-#endif //CLASSICAL_SUPER_RESOLUTION_MATH_UTILS_H
+}
+
+#endif

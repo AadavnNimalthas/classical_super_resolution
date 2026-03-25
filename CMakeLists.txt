@@ -20,5 +20,7 @@ add_executable(classical_super_resolution ${SOURCES}
         reconstruction/reconstruct.cpp
         reconstruction/reconstruct.h
         utils/math_utils.h
+        utils/math_utils.cpp
         utils/system_info.cpp
-        utils/system_info.h)
+        utils/system_info.h
+)

@@ -1,14 +1,5 @@
-//
-// Created by Aadavn Nimalthas on 2026-03-25.
-//
+#pragma once
+#include <vector>
+#include "../core/image.h"
 
-#ifndef CLASSICAL_SUPER_RESOLUTION_RECONSTRUCT_H
-#define CLASSICAL_SUPER_RESOLUTION_RECONSTRUCT_H
-
-
-class reconstruct
-{
-};
-
-
-#endif //CLASSICAL_SUPER_RESOLUTION_RECONSTRUCT_H
+Image reconstruct(const std::vector<Image>& images, int scale);

@@ -1,14 +1,5 @@
-//
-// Created by Aadavn Nimalthas on 2026-03-25.
-//
+#pragma once
+#include <string>
+#include "../core/image.h"
 
-#ifndef CLASSICAL_SUPER_RESOLUTION_IMAGE_WRITER_H
-#define CLASSICAL_SUPER_RESOLUTION_IMAGE_WRITER_H
-
-
-class image_writer
-{
-};
-
-
-#endif //CLASSICAL_SUPER_RESOLUTION_IMAGE_WRITER_H
+void save_image(const std::string& path, const Image& img);

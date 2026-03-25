@@ -1,14 +1,19 @@
-//
-// Created by Aadavn Nimalthas on 2026-03-25.
-//
+#ifndef SYSTEMINFO_H
+#define SYSTEMINFO_H
 
-#ifndef CLASSICAL_SUPER_RESOLUTION_SYSTEM_INFO_H
-#define CLASSICAL_SUPER_RESOLUTION_SYSTEM_INFO_H
+#include <string>
 
-
-class system_info
-{
+enum class PerformanceTier {
+    LOW,
+    MEDIUM,
+    HIGH
 };
 
+class SystemInfo {
+public:
+    static int getRAM_GB();
+    static std::string getCPUName();
+    static PerformanceTier getPerformanceTier();
+};
 
-#endif //CLASSICAL_SUPER_RESOLUTION_SYSTEM_INFO_H
+#endif

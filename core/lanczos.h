@@ -1,14 +1,5 @@
-//
-// Created by Aadavn Nimalthas on 2026-03-25.
-//
+#pragma once
+#include "image.h"
 
-#ifndef CLASSICAL_SUPER_RESOLUTION_LANCZOS_H
-#define CLASSICAL_SUPER_RESOLUTION_LANCZOS_H
-
-
-class lanczos
-{
-};
-
-
-#endif //CLASSICAL_SUPER_RESOLUTION_LANCZOS_H
+float lanczos(float x, int a);
+float sample_lanczos(const Image& img, float x, float y, int c, int a);

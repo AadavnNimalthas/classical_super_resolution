@@ -1,14 +1,12 @@
-//
-// Created by Aadavn Nimalthas on 2026-03-25.
-//
+#pragma once
+#include <string>
+#include <vector>
 
-#ifndef CLASSICAL_SUPER_RESOLUTION_IMAGE_LOADER_H
-#define CLASSICAL_SUPER_RESOLUTION_IMAGE_LOADER_H
-
-
-class image_loader
-{
+struct Image {
+    int width;
+    int height;
+    int channels;
+    std::vector<float> data;
 };
 
-
-#endif //CLASSICAL_SUPER_RESOLUTION_IMAGE_LOADER_H
+Image load_image(const std::string& path);
