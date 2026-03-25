@@ -1,0 +1,14 @@
+//
+// Created by Aadavn Nimalthas on 2026-03-25.
+//
+
+#ifndef CLASSICAL_SUPER_RESOLUTION_LANCZOS_H
+#define CLASSICAL_SUPER_RESOLUTION_LANCZOS_H
+
+
+class lanczos
+{
+};
+
+
+#endif //CLASSICAL_SUPER_RESOLUTION_LANCZOS_H

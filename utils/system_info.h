@@ -1,0 +1,14 @@
+//
+// Created by Aadavn Nimalthas on 2026-03-25.
+//
+
+#ifndef CLASSICAL_SUPER_RESOLUTION_SYSTEM_INFO_H
+#define CLASSICAL_SUPER_RESOLUTION_SYSTEM_INFO_H
+
+
+class system_info
+{
+};
+
+
+#endif //CLASSICAL_SUPER_RESOLUTION_SYSTEM_INFO_H

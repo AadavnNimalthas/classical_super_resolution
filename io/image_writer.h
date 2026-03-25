@@ -1,0 +1,14 @@
+//
+// Created by Aadavn Nimalthas on 2026-03-25.
+//
+
+#ifndef CLASSICAL_SUPER_RESOLUTION_IMAGE_WRITER_H
+#define CLASSICAL_SUPER_RESOLUTION_IMAGE_WRITER_H
+
+
+class image_writer
+{
+};
+
+
+#endif //CLASSICAL_SUPER_RESOLUTION_IMAGE_WRITER_H
