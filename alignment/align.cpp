@@ -40,7 +40,7 @@ float compute_error(const Image& ref, const Image& target, int dx, int dy)
 
 Shift estimate_shift(const Image& ref, const Image& target)
 {
-    int search_radius = 3;
+    int search_radius = 15;
 
     float best_error = std::numeric_limits<float>::max();
 
