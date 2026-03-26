@@ -2,6 +2,7 @@
 #include <limits>
 #include <cmath>
 #include <algorithm>
+#include <omp.h>
 
 float compute_error(const Image& ref, const Image& target, int dx, int dy)
 {
@@ -13,23 +14,37 @@ float compute_error(const Image& ref, const Image& target, int dx, int dy)
 
     int channels = ref.channels;
 
-    for(int y = 0; y < ref.height; y++)
+    // Parallelize pixel comparison
+    #pragma omp parallel
     {
-        for(int x = 0; x < ref.width; x++)
+        float local_error = 0.0f;
+        int local_count = 0;
+
+        #pragma omp for collapse(2)
+        for(int y = 0; y < ref.height; y++)
         {
-            int tx = x + dx;
-            int ty = y + dy;
-
-            if(tx < 0 || tx >= target.width || ty < 0 || ty >= target.height)
-                continue;
-
-            for(int c = 0; c < channels; c++)
+            for(int x = 0; x < ref.width; x++)
             {
-                float diff = ref.at(x, y, c) - target.at(tx, ty, c);
-                error += diff * diff;
-                count++;
+                int tx = x + dx;
+                int ty = y + dy;
+
+                if(tx < 0 || tx >= target.width || ty < 0 || ty >= target.height)
+                    continue;
+
+                for(int c = 0; c < channels; c++)
+                {
+                    float diff = ref.at(x, y, c) - target.at(tx, ty, c);
+                    local_error += diff * diff;
+                    local_count++;
+                }
             }
         }
+
+        #pragma omp atomic
+        error += local_error;
+
+        #pragma omp atomic
+        count += local_count;
     }
 
     if(count == 0)
@@ -40,24 +55,41 @@ float compute_error(const Image& ref, const Image& target, int dx, int dy)
 
 Shift estimate_shift(const Image& ref, const Image& target)
 {
-    int search_radius = 15;
+    const int search_radius = 15;
 
     float best_error = std::numeric_limits<float>::max();
-
     int best_dx = 0;
     int best_dy = 0;
 
-    for(int dy = -search_radius; dy <= search_radius; dy++)
+    #pragma omp parallel
     {
-        for(int dx = -search_radius; dx <= search_radius; dx++)
-        {
-            float err = compute_error(ref, target, dx, dy);
+        float local_best_error = std::numeric_limits<float>::max();
+        int local_best_dx = 0;
+        int local_best_dy = 0;
 
-            if(err < best_error)
+        #pragma omp for collapse(2)
+        for(int dy = -search_radius; dy <= search_radius; dy++)
+        {
+            for(int dx = -search_radius; dx <= search_radius; dx++)
             {
-                best_error = err;
-                best_dx = dx;
-                best_dy = dy;
+                float err = compute_error(ref, target, dx, dy);
+
+                if(err < local_best_error)
+                {
+                    local_best_error = err;
+                    local_best_dx = dx;
+                    local_best_dy = dy;
+                }
+            }
+        }
+
+        #pragma omp critical
+        {
+            if(local_best_error < best_error)
+            {
+                best_error = local_best_error;
+                best_dx = local_best_dx;
+                best_dy = local_best_dy;
             }
         }
     }
