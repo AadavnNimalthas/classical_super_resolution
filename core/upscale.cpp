@@ -1,3 +1,4 @@
+// 1.0
 #include "upscale.h"
 #include "lanczos.h"
 

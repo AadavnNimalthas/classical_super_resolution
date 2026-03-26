@@ -1,3 +1,4 @@
+// 1.0
 #pragma once
 #include <vector>
 #include "../core/image.h"

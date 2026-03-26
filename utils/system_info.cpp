@@ -1,3 +1,4 @@
+// 1.0
 #include "system_info.h"
 
 #if defined(_WIN32)

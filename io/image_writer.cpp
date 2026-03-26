@@ -1,3 +1,4 @@
+// 1.0
 #include "image_writer.h"
 #include "stb_image_write.h"
 

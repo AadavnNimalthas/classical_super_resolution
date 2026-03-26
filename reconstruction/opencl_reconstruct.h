@@ -1,3 +1,4 @@
+// 1.0
 #pragma once
 #include "../core/image.h"
 #include "../alignment/align.h"
