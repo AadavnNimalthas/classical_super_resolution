@@ -8,6 +8,7 @@ Image upscale_lanczos(const Image& input, int scale, int a)
 
     Image output(new_w, new_h, input.channels);
 
+    #pragma omp parallel for
     for(int y = 0; y < new_h; y++)
     {
         for(int x = 0; x < new_w; x++)
