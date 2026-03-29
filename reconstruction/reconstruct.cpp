@@ -1,7 +1,8 @@
-// 1.0
+// 1.1
 #include "reconstruct.h"
 #include "../core/upscale.h"
 #include "../alignment/align.h"
+#include "../alignment/patch_match.h"
 
 // Each GPU backend is compiled only on its target platform.
 // Exactly one of these will be defined by CMake.

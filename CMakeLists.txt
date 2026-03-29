@@ -35,6 +35,8 @@ set(SOURCES
         utils/math_utils.h
         utils/system_info.cpp
         utils/system_info.h
+        alignment/patch_match.cpp
+        alignment/patch_match.h
 )
 
 # ══════════════════════════════════════════════════════════════════════════════
