@@ -1,8 +1,10 @@
 **Classical Super-Resolution (C++)**
 
-v1.0 — Stable Release
+v1.0
 
 A cross-platform classical super-resolution pipeline that reconstructs a higher-quality image from multiple inputs using multi-threaded CPU processing and GPU acceleration.
+
+There is a current algorithm bug in alignment, shifts are noted however the shift does not happen to the images.
 
 **Features**
 
